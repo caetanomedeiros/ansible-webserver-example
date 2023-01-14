@@ -1,0 +1,16 @@
+---
+- name: "Include the system packages task"
+  ansible.builtin.include_tasks: "packages.yml"
+
+- name: "Ensure the hostname is set"
+  ansible.builtin.hostname:
+    name: "{{ server_hostname }}"
+
+- name: "Ensure the timezone is set to UTC"
+  ansible.builtin.file:
+    src: /usr/share/zoneinfo/UTC
+    dest: /etc/localtime
+    state: link
+
+- name: "Ensure the application user is configured"
+  ansible.builtin.include_tasks: "user.yml"

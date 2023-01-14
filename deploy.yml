@@ -1,0 +1,45 @@
+---
+- name: "Deploy a PHP web server"
+  hosts: all
+  gather_facts: true
+  vars:
+    application_domain: ""
+    server_hostname: ""
+    application_user: ""
+    php_version: ""
+
+  tasks:
+    - name: "Fail if the server distribution is not supported"
+      ansible.builtin.fail:
+        msg: "This role is only supported on Ubuntu 20.04 and 22.04"
+      when: ansible_distribution != "Ubuntu" or ansible_distribution_version not in ["20.04", "22.04"]
+
+    - name: "Include the system role"
+      ansible.builtin.import_role:
+        name: "system"
+
+    - name: "Include the PHP role"
+      ansible.builtin.import_role:
+        name: "php"
+
+    - name: "Ensure the public directory exists for the application"
+      ansible.builtin.file:
+        path: "/home/{{ application_user }}/{{ application_domain }}/public"
+        owner: "{{ application_user }}"
+        group: "{{ application_user }}"
+        state: "directory"
+        mode: "0755"
+
+    - name: "Ensure the index.php example file is deployed"
+      ansible.builtin.copy:
+        content: |
+          <?php
+          phpinfo();
+        dest: "/home/{{ application_user }}/{{ application_domain }}/public/index.php"
+        owner: "{{ application_user }}"
+        group: "{{ application_user }}"
+        mode: "0644"
+
+    - name: "Include the Caddy server role"
+      ansible.builtin.import_role:
+        name: "caddy"

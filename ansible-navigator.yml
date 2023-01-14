@@ -1,0 +1,10 @@
+---
+ansible-navigator:
+  ansible:
+    config:
+      path: "ansible.cfg"
+
+  playbook-artifact:
+    enable: false
+
+  mode: stdout

@@ -1,0 +1,45 @@
+---
+- name: "Ensure all apt packages are updated and upgraded"
+  ansible.builtin.import_tasks: "update.yml"
+
+- name: "Ensure software-properties-common is installed"
+  ansible.builtin.apt:
+    name: "software-properties-common"
+    state: "present"
+
+- name: "Ensure the required apt packages are installed"
+  ansible.builtin.apt:
+    dpkg_options: "force-confdef"
+    force: "yes"
+    pkg:
+      - build-essential
+      - curl
+      - pkg-config
+      - fail2ban
+      - gcc
+      - g++
+      - git
+      - libmcrypt4
+      - libpcre3-dev
+      - make
+      - python3
+      - python3-pip
+      - sendmail
+      - supervisor
+      - ufw
+      - zip
+      - unzip
+      - whois
+      - zsh
+      - ncdu
+      - uuid-runtime
+      - acl
+      - libpng-dev
+      - libmagickwand-dev
+      - libpcre2-dev
+      - cron
+      - jq
+      - net-tools
+
+- name: "Ensure all apt packages are updated and upgraded"
+  ansible.builtin.import_tasks: "update.yml"

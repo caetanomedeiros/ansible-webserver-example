@@ -1,0 +1,40 @@
+---
+- name: "Ensure the caddy binary is installed"
+  ansible.builtin.stat:
+    path: "/usr/bin/caddy"
+  register: caddy_binary
+
+- name: "Install caddy if not installed"
+  ansible.builtin.get_url:
+    url: "{{ caddy_binary_url }}"
+    dest: "/usr/bin/caddy"
+    mode: 0755
+  when: not caddy_binary.stat.exists
+
+- name: "Copy the caddy service file"
+  ansible.builtin.template:
+    src: "caddy.service.j2"
+    dest: "/etc/systemd/system/caddy.service"
+    mode: 0644
+
+- name: "Ensure the caddy folder exists"
+  ansible.builtin.file:
+    path: "/etc/caddy"
+    state: directory
+    mode: 0755
+
+- name: "Copy the caddy config file"
+  ansible.builtin.template:
+    src: "Caddyfile.j2"
+    dest: "/etc/caddy/Caddyfile"
+    mode: 0644
+
+- name: "Reload systemctl daemon"
+  ansible.builtin.systemd:
+    daemon_reload: true
+
+- name: "Start the caddy service"
+  ansible.builtin.service:
+    name: caddy
+    state: started
+    enabled: true

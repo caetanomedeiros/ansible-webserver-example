@@ -1,0 +1,7 @@
+---
+- name: "Ensure the application user exists"
+  ansible.builtin.user:
+    name: "{{ application_user }}"
+    shell: /bin/bash
+    createhome: true
+    state: present

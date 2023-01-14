@@ -1,0 +1,9 @@
+{{ application_domain }} {
+	root * /home/{{ application_user }}/{{ application_domain }}/public
+
+    encode zstd gzip
+
+    file_server
+
+    php_fastcgi unix//run/php/php{{ php_version }}-fpm.sock
+}

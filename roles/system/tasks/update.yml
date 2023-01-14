@@ -1,0 +1,5 @@
+---
+- name: "Ensure all apt packages are updated and upgraded"
+  ansible.builtin.apt:
+    update_cache: true
+    upgrade: "yes"
