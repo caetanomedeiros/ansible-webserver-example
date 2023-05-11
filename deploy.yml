@@ -1,6 +1,6 @@
 ---
 - name: "Deploy a PHP web server"
-  hosts: all
+  hosts: webserver
   gather_facts: true
   vars:
     application_domain: ""
